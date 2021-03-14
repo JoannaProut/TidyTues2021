@@ -1,0 +1,113 @@
+---
+title: "Gross Domestic Earnings of Movies that Pass and Fail the Bechdel Test"
+author: "Joanna Prout"
+date: "3/10/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library (tidyverse)
+library (showtext)
+library (ggrepel)
+library (scales)
+```
+
+
+```{r fonts, echo=FALSE, message=FALSE}
+font_add_google ("Roboto")
+showtext_auto ()
+
+```
+
+```{r, message = FALSE}
+#read in the data manually
+movies <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-03-09/movies.csv')
+
+```
+
+
+```{r formatting domestic gross variable, message=FALSE, warning=FALSE}
+options(scipen = 999)  #turn off scientific notation
+
+#select only needed variables
+sm <- select (movies, year, title, binary, domgross_2013)
+
+#reformat domgross_2013 
+#changing to numeric
+sm$domgross_2013_num <- as.numeric(sm$domgross_2013)
+
+#make labels variable
+sm2 <- sm %>%
+  mutate (labels = round(domgross_2013_num/1000000, digits =1))
+
+sm2$labels <- as.character (sm2$labels)
+
+```
+
+```{r bassic graph for passing movies, message = FALSE}
+passes  <- sm2 %>%
+  filter (binary == "PASS")%>%
+   slice_max (domgross_2013_num, n = 5)
+
+fails <- sm2 %>%
+  filter (binary == "FAIL")%>%
+   slice_max (domgross_2013_num, n = 5)
+
+d <- rbind (passes, fails)
+```
+
+
+```{r}
+
+p <- ggplot (d, aes (x=year, y=domgross_2013_num, size = domgross_2013_num, label = title, color = binary)) +
+  geom_point (aes (color = binary, show_guide = FALSE)) +
+ 
+  geom_text_repel (show.legend = FALSE, color = "black") +
+  scale_size(range = c(10, 14), name="Gross Earnings in $", labels = comma) +
+  scale_y_continuous (labels = scales::label_number_si(), limits = c(500000000, 2500000000)) +
+  guides (color = FALSE, size = FALSE) +
+  facet_wrap (~binary, nrow = 2) 
+  
+ 
+```
+
+
+
+```{r, adding theme for passing movies graph}
+
+p2 <-   p + theme (text = element_text (family = "Roboto",  size = 36, color = "black"),
+                      plot.title = element_text ( face = "bold", size = 38, color = "black"),
+                   plot.subtitle = element_text (lineheight = 0.4),
+                  panel.grid = element_blank (),
+                  panel.background = element_rect(color = "black", fill = "white"),
+                  plot.background = element_rect(color = "black", fill = "ivory"),
+                    strip.background = element_rect (fill = "peachpuff", color = "black"),
+         axis.text.y = element_text (),
+         axis.text.x = element_text (color = "black"),
+         axis.line.x = element_line (color = "black"),
+         axis.line.y = element_line (color = "black"),
+         axis.ticks.y = element_blank (),
+         axis.ticks.x = element_blank (),
+         plot.margin = margin (0.5, 0.5, 0.5, 0.5, "cm")) +
+  labs ( subtitle = "To pass a movie must have (1) two named women, (2) that talk to each other, \n(3) about something other than men",
+         x = " ",
+         y = "$ earned",
+         title = "Top Earning Movies 1970-2013 by Bechdel Test Pass or Fail Status") +
+    scale_color_manual (values = c("skyblue", "lightcoral"))
+```
+
+
+
+
+
+
+```{r}
+ggsave ("bechdel.png", height = 7, width = 7)
+```
+
+
+
+
+
+
