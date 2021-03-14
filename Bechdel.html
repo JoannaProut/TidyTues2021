@@ -212,7 +212,7 @@ d &lt;- rbind (passes, fails)</code></pre>
                   panel.background = element_rect(color = &quot;black&quot;, fill = &quot;white&quot;),
                   plot.background = element_rect(color = &quot;black&quot;, fill = &quot;ivory&quot;),
                     strip.background = element_rect (fill = &quot;peachpuff&quot;, color = &quot;black&quot;),
-         axis.text.y = element_text (),
+         axis.text.y = element_text (color = &quot;black&quot;),
          axis.text.x = element_text (color = &quot;black&quot;),
          axis.line.x = element_line (color = &quot;black&quot;),
          axis.line.y = element_line (color = &quot;black&quot;),
@@ -222,7 +222,8 @@ d &lt;- rbind (passes, fails)</code></pre>
   labs ( subtitle = &quot;To pass a movie must have (1) two named women, (2) that talk to each other, \n(3) about something other than men&quot;,
          x = &quot; &quot;,
          y = &quot;$ earned&quot;,
-         title = &quot;Top Earning Movies 1970-2013 by Bechdel Test Pass or Fail Status&quot;) +
+         title = &quot;Top Earning Movies 1970-2013 by Bechdel Test Pass or Fail Status&quot;,
+         caption = &quot;Data from fivethirtyeight | Graphic @joieprout&quot;) +
     scale_color_manual (values = c(&quot;skyblue&quot;, &quot;lightcoral&quot;))</code></pre>
 <pre class="r"><code>ggsave (&quot;bechdel.png&quot;, height = 7, width = 7)</code></pre>
 

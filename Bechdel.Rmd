@@ -83,7 +83,7 @@ p2 <-   p + theme (text = element_text (family = "Roboto",  size = 36, color = "
                   panel.background = element_rect(color = "black", fill = "white"),
                   plot.background = element_rect(color = "black", fill = "ivory"),
                     strip.background = element_rect (fill = "peachpuff", color = "black"),
-         axis.text.y = element_text (),
+         axis.text.y = element_text (color = "black"),
          axis.text.x = element_text (color = "black"),
          axis.line.x = element_line (color = "black"),
          axis.line.y = element_line (color = "black"),
@@ -93,7 +93,8 @@ p2 <-   p + theme (text = element_text (family = "Roboto",  size = 36, color = "
   labs ( subtitle = "To pass a movie must have (1) two named women, (2) that talk to each other, \n(3) about something other than men",
          x = " ",
          y = "$ earned",
-         title = "Top Earning Movies 1970-2013 by Bechdel Test Pass or Fail Status") +
+         title = "Top Earning Movies 1970-2013 by Bechdel Test Pass or Fail Status",
+         caption = "Data from fivethirtyeight | Graphic @joieprout") +
     scale_color_manual (values = c("skyblue", "lightcoral"))
 ```
 
